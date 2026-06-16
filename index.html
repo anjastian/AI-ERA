@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helpdesk Hub - IT Dashboard & Ticketing System</title>
+  <meta name="description" content="Dashboard Helpdesk IT untuk mengelola keluhan, pengerjaan masalah, dan memantau status tiket secara real-time.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== TOAST CONTAINER ==================== -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ==================== VIEW 1: PORTAL SELECTION ==================== -->
+  <div id="view-portal" class="view-container active">
+    <div class="portal-wrapper">
+      <div class="portal-title-area">
+        <h1>Helpdesk Hub</h1>
+        <p>Silakan pilih portal untuk melanjutkan akses layanan teknologi informasi</p>
+      </div>
+      
+      <div class="portal-grid">
+        <!-- Card: Input Masalah (Employee) -->
+        <div class="glass-card portal-card" id="btn-portal-reporter">
+          <div class="portal-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          </div>
+          <h3>Laporkan Masalah</h3>
+          <p>Kirimkan keluhan teknis, kendala hardware/software, atau permintaan layanan IT divisi Anda.</p>
+        </div>
+
+        <!-- Card: Login Agent (Technician) -->
+        <div class="glass-card portal-card" id="btn-portal-agent">
+          <div class="portal-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </div>
+          <h3>IT Helpdesk Dashboard</h3>
+          <p>Portal login bagi staf IT / Agen Helpdesk untuk mengelola antrean masalah dan memperbarui status pengerjaan.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== VIEW 2: LOGIN FORM ==================== -->
+  <div id="view-login" class="view-container">
+    <div class="auth-wrapper">
+      <div class="glass-card">
+        <div class="auth-header">
+          <h2>IT Helpdesk Login</h2>
+          <p>Masukkan username dan PIN agen Anda</p>
+        </div>
+
+        <form id="form-login" novalidate>
+          <div class="form-group">
+            <label for="login-username">Username (8 Digit Angka)</label>
+            <input 
+              type="text" 
+              id="login-username" 
+              class="input-control" 
+              placeholder="Contoh: 00000000" 
+              maxlength="8" 
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="login-pin">PIN Password (6 Digit Angka)</label>
+            <input 
+              type="password" 
+              id="login-pin" 
+              class="input-control" 
+              placeholder="******" 
+              maxlength="6" 
+              required
+            >
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+            Masuk Dashboard
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </form>
+
+        <div class="auth-hint">
+          <strong>Demo Credential:</strong><br>
+          Username: <code>00000000</code><br>
+          PIN: <code>000000</code>
+        </div>
+
+        <button class="btn btn-secondary back-to-portal-btn" onclick="navigateTo('view-portal')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Kembali ke Portal
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== VIEW 3: FORM INPUT MASALAH ==================== -->
+  <div id="view-input-masalah" class="view-container">
+    <div class="ticket-form-wrapper">
+      <div class="glass-card">
+        <div class="ticket-form-header">
+          <h2>Form Input Masalah</h2>
+          <button class="btn btn-secondary" onclick="navigateTo('view-portal')">
+            Batal
+          </button>
+        </div>
+
+        <form id="form-report-issue">
+          <div class="form-group">
+            <label for="report-username">Username Pengaju / Pelapor (8 Digit NIK/ID)</label>
+            <input 
+              type="text" 
+              id="report-username" 
+              class="input-control" 
+              placeholder="Masukkan 8 digit NIK/ID Anda" 
+              maxlength="8" 
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="report-divisi">Divisi Pelapor</label>
+            <select id="report-divisi" class="input-control" required>
+              <option value="" disabled selected>Pilih Divisi...</option>
+              <option value="IT & Infrastructure">IT & Infrastructure</option>
+              <option value="Finance & Accounting">Finance & Accounting</option>
+              <option value="Human Resources">Human Resources / HRD</option>
+              <option value="Marketing & Sales">Marketing & Sales</option>
+              <option value="Operations & Logistics">Operations & Logistics</option>
+              <option value="General Affair (GA)">General Affair (GA)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="report-jenis-masalah">Jenis Masalah</label>
+            <select id="report-jenis-masalah" class="input-control" required>
+              <option value="" disabled selected>Pilih Jenis Masalah...</option>
+              <option value="Hardware / Komputer / Laptop">Hardware (Komputer, Laptop, Monitor)</option>
+              <option value="Software / OS / Aplikasi">Software (Windows, Office, Aplikasi Internal)</option>
+              <option value="Jaringan / Internet / Wi-Fi">Jaringan (Kabel LAN, Wi-Fi Lambat, Putus)</option>
+              <option value="Akses Akun / Reset Password">Akses Akun / Reset Password (Email, ERP)</option>
+              <option value="Printer & Scanner">Printer & Scanner (Paper Jam, Error Offline)</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="report-detail-masalah">Detail / Input Masalah</label>
+            <textarea 
+              id="report-detail-masalah" 
+              class="input-control" 
+              rows="5" 
+              placeholder="Jelaskan secara detail masalah yang sedang dihadapi beserta langkah-langkah atau pesan error yang terjadi..." 
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="navigateTo('view-portal')">Kembali</button>
+            <button type="submit" class="btn btn-primary">
+              Kirim Laporan
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== VIEW 4: DASHBOARD & TICKET WORKSPACE ==================== -->
+  <div id="view-dashboard" class="view-container">
+    <div class="dashboard-layout">
+      
+      <!-- Top Header -->
+      <header class="dashboard-header">
+        <div class="dashboard-brand">
+          <h1>Dashboard Helpdesk IT</h1>
+          <p>Pantau antrean laporan dan update status pengerjaan tiket aktif</p>
+        </div>
+        <div class="dashboard-user-card">
+          <div class="user-info">
+            <span class="role">Admin Helpdesk</span>
+            <span id="dashboard-user-display" style="font-weight: 600;">00000000</span>
+          </div>
+          <button class="btn btn-outline-primary btn-sm" id="btn-logout" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+            Keluar
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- 4 Indicators Grid (New, Progress, Solve, Close) -->
+      <section class="indicators-grid">
+        <!-- Metric: New -->
+        <div class="glass-card indicator-card new">
+          <div class="indicator-header">
+            <span class="indicator-title">New</span>
+            <div class="indicator-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+          </div>
+          <div class="indicator-body">
+            <span class="indicator-count" id="count-new">0</span>
+            <span class="indicator-label">Tiket Baru</span>
+          </div>
+        </div>
+
+        <!-- Metric: Progress -->
+        <div class="glass-card indicator-card progress">
+          <div class="indicator-header">
+            <span class="indicator-title">Progress</span>
+            <div class="indicator-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+          </div>
+          <div class="indicator-body">
+            <span class="indicator-count" id="count-progress">0</span>
+            <span class="indicator-label">Sedang Diproses</span>
+          </div>
+        </div>
+
+        <!-- Metric: Solve -->
+        <div class="glass-card indicator-card solve">
+          <div class="indicator-header">
+            <span class="indicator-title">Solve</span>
+            <div class="indicator-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="indicator-body">
+            <span class="indicator-count" id="count-solve">0</span>
+            <span class="indicator-label">Selesai (Solve)</span>
+          </div>
+        </div>
+
+        <!-- Metric: Close -->
+        <div class="glass-card indicator-card close">
+          <div class="indicator-header">
+            <span class="indicator-title">Close</span>
+            <div class="indicator-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+          </div>
+          <div class="indicator-body">
+            <span class="indicator-count" id="count-close">0</span>
+            <span class="indicator-label">Ditutup Resmi</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Workspace layout -->
+      <section class="workspace-grid">
+        
+        <!-- Left Panel: Form Pengerjaan Problem -->
+        <aside class="glass-card work-panel-card">
+          <div class="work-panel-header">
+            <h3>Form Pengerjaan Problem</h3>
+          </div>
+
+          <!-- Placeholder if no ticket selected -->
+          <div id="work-placeholder" class="work-form-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <p>Pilih tiket dari daftar di samping untuk memuat detail pengerjaan problem helpdesk.</p>
+          </div>
+
+          <!-- Active Form (Hidden initially) -->
+          <form id="form-work-ticket" style="display: none;">
+            <!-- Hidden field for ticket ID -->
+            <input type="hidden" id="work-ticket-id">
+            
+            <div class="work-ticket-info">
+              <div class="info-block">
+                <span class="info-label">Tiket ID</span>
+                <span class="info-value" id="work-ticket-id-display">-</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label">Kategori</span>
+                <span class="info-value" id="work-category-display">-</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label">Reporter (User)</span>
+                <span class="info-value" id="work-username-display">-</span>
+              </div>
+              <div class="info-block">
+                <span class="info-label">Divisi</span>
+                <span class="info-value" id="work-divisi-display">-</span>
+              </div>
+              <div class="info-block full-width">
+                <span class="info-label">Detail Masalah</span>
+                <span class="info-value" id="work-detail-display" style="white-space: pre-wrap;">-</span>
+              </div>
+            </div>
+
+            <!-- Editable fields for status update -->
+            <div class="form-group">
+              <label for="work-status">Status Pengerjaan</label>
+              <select id="work-status" class="input-control" required>
+                <option value="new">NEW</option>
+                <option value="progress">PROGRES</option>
+                <option value="solve">SOLVE</option>
+                <option value="close">CLOSE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="work-notes">Catatan Pengerjaan / Tindakan IT</label>
+              <textarea 
+                id="work-notes" 
+                class="input-control" 
+                rows="4" 
+                placeholder="Tuliskan tindakan pemecahan masalah atau progres pengerjaan di sini..."
+              ></textarea>
+            </div>
+
+            <div class="work-form-actions">
+              <button type="button" class="btn btn-secondary" id="btn-cancel-work">Batal</button>
+              <button type="submit" class="btn btn-primary">
+                Simpan & Update
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              </button>
+            </div>
+          </form>
+        </aside>
+
+        <!-- Right Panel: Tickets List -->
+        <main class="glass-card">
+          <div class="list-panel-header">
+            <h3>Daftar Tiket Keluhan</h3>
+            <button class="btn btn-outline-primary btn-sm" id="btn-dashboard-add-ticket" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+              + Tambah Masalah
+            </button>
+          </div>
+
+          <!-- Search & Filters -->
+          <div class="search-filter-controls">
+            <div class="search-box">
+              <span class="search-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </span>
+              <input 
+                type="text" 
+                id="search-tickets" 
+                class="input-control" 
+                placeholder="Cari berdasarkan ID tiket, pelapor, divisi atau masalah..."
+              >
+            </div>
+
+            <div class="filter-badge-list">
+              <button class="filter-btn active" data-filter="all">Semua Tiket</button>
+              <button class="filter-btn" data-filter="new">New</button>
+              <button class="filter-btn" data-filter="progress">Progres</button>
+              <button class="filter-btn" data-filter="solve">Solve</button>
+              <button class="filter-btn" data-filter="close">Close</button>
+            </div>
+          </div>
+
+          <!-- Tickets Container -->
+          <div id="tickets-list" class="tickets-container">
+            <!-- Dynamic Ticket Items Go Here -->
+          </div>
+        </main>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
